@@ -15,14 +15,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" />
 </head>
 
-<body onload="listar()">
+<body>
   <!--header inicio-->
   <div class="header">
     <div class="container">
       <h1 class="titulo"><img src="./assets/img/Temporalis_Logo.png" alt=""></h1>
       <ul class="navbar">
         <li>
-          <a href="index.html">Inicial</a>
+          <a href="index.html">Homepage</a>
         </li>
         <li>
           <a href="dashboard.html">Rolagens</a>
@@ -59,7 +59,7 @@
           </div>
           <div class="campo">
             <span>E-mail:</span>
-            <input id="email_input" type="text" placeholder="meuemail@provedor.com" />
+            <input id="email_input" type="text" placeholder=" Seu Email" />
           </div>
           <div class="campo">
             <span>Senha:</span>
@@ -83,7 +83,7 @@
   <!--footer inicio-->
   <div class="footer">
     <div class="container">
-      <h4>Feito com amor por Ricardo Kazuo Inoue &hearts; SPTech &copy; 2026</h4>
+      <h4>Feito por Ricardo Kazuo Inoue @Temporalis 2026</h4>
     </div>
   </div>
   <!--footer fim-->
@@ -105,7 +105,6 @@
     var emailVar = email_input.value;
     var senhaVar = senha_input.value;
     var confirmacaoSenhaVar = confirmacao_senha_input.value;
-    var codigoVar = codigo_input.value;
     var idEmpresaVincular
 
     // Verificando se há algum campo em branco
@@ -113,8 +112,7 @@
       nomeVar == "" ||
       emailVar == "" ||
       senhaVar == "" ||
-      confirmacaoSenhaVar == "" ||
-      codigoVar == ""
+      confirmacaoSenhaVar == "" 
     ) {
       cardErro.style.display = "block";
       mensagem_erro.innerHTML =
@@ -123,11 +121,11 @@
       finalizarAguardar();
       return false;
     } else {
-      setInterval(sumirMensagem, 5000);
+      //setInterval(sumirMensagem, 5000);
     }
 
     // Verificando se o código de ativação é de alguma empresa cadastrada
-    for (let i = 0; i < listaEmpresasCadastradas.length; i++) {
+    /* for (let i = 0; i < listaEmpresasCadastradas.length; i++) {
       if (listaEmpresasCadastradas[i].codigo_ativacao == codigoVar) {
         idEmpresaVincular = listaEmpresasCadastradas[i].id
         console.log("Código de ativação válido.");
@@ -138,7 +136,7 @@
         finalizarAguardar();
       }
     }
-
+*/
     // Enviando o valor da nova input
     fetch("/usuarios/cadastrar", {
       method: "POST",
@@ -151,7 +149,7 @@
         nomeServer: nomeVar,
         emailServer: emailVar,
         senhaServer: senhaVar,
-        idEmpresaVincularServer: idEmpresaVincular
+    
       }),
     })
       .then(function (resposta) {
@@ -161,7 +159,7 @@
           cardErro.style.display = "block";
 
           mensagem_erro.innerHTML =
-            "Cadastro realizado com sucesso! Redirecionando para tela de Login...";
+            "Cadastro realizado com sucesso!";
 
           setTimeout(() => {
             window.location = "login.html";
@@ -181,27 +179,5 @@
     return false;
   }
 
-  // Listando empresas cadastradas 
-  function listar() {
-    fetch("/empresas/listar", {
-      method: "GET",
-    })
-      .then(function (resposta) {
-        resposta.json().then((empresas) => {
-          empresas.forEach((empresa) => {
-            listaEmpresasCadastradas.push(empresa);
-
-            console.log("listaEmpresasCadastradas")
-            console.log(listaEmpresasCadastradas[0].codigo_ativacao)
-          });
-        });
-      })
-      .catch(function (resposta) {
-        console.log(`#ERRO: ${resposta}`);
-      });
-  }
-
-  function sumirMensagem() {
-    cardErro.style.display = "none";
-  }
+  
 </script>

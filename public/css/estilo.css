@@ -119,17 +119,28 @@ body {
 
 
 /* MISSÃO VISÃO VALORES */
+.texto_temporalis {
+  display: flex;
+  flex-direction: column;
+  
+  
+}
 
 .social {
   background-color: #3D375E;
   border-bottom: solid #6D28D9 2px;
-  display: flex;
   color: white;
   font-family: IBM Plex Mono, 'Monospace';
+  
 }
 
 .social .container {
-  justify-content: center;
+display: flex;
+flex-direction: row;
+align-items: center;
+justify-content: center;
+gap: 40px;
+padding: 20px;
 }
 
 .box img {
@@ -140,21 +151,25 @@ body {
 .social .container .boxes {
   display: flex;
   justify-content: space-between;
-  width: 100%;
+  flex-direction: row;
   padding: 30px 0;
   gap: 50px;
 }
 
-.social p {
+.social .caixa_texto {
   text-align: center;
-  font-size: 16px;
+  font-size: 13px;
   color: white;
+  font-weight: bold;
+
 }
 
 .box {
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 250px;
+  height: 250px;
   background-color: #6D28D9;
   border: solid 2px #1E1B2E;
   border-radius: 8px;
@@ -168,8 +183,7 @@ body {
   justify-content: space-between;
   color: white;
   padding: 20px;
-  height: 500px;
-  border-bottom: solid #6D28D9 2px;
+  height: 900px;
   font-family: IBM Plex Mono, 'Monospace';
 
 }
@@ -191,21 +205,32 @@ body {
   padding: 160px;
 }
 
-.sobre_mim img {
+.sobre_mim .eu_sobre {
   height: 300px;
   border-radius: 10%;
   border: #6D28D9 solid 3px;
+}
+
+.discord {
+  text-decoration: none;
+  color: white;
+}
+.link_discord {
+  height: 50px;
+
 }
 
 
 /* FOOTER */
 
 .footer {
-  background-color: #050614;
+  background-color: #3D375E;
   height: 50px;
   color: #fff;
   display: flex;
   font-size: 15px;
+  margin-top: 100px;
+  border-top: solid #6D28D9 2px;
 }
 
 .footer .container {
@@ -333,14 +358,15 @@ body {
 
 .card_erro {
   display: none;
-  background-color: #fff;
-  color: black;
+  background-color: #3D375E;
+  color: white;
   width: 230px;
   position: fixed;
   border-radius: 4px;
-  border: #ED145B 3px solid;
+  border: #6D28D9 3px solid;
   padding: 10px;
   margin-right: 10%;
+  margin-top: 10px;
 }
 
 .card_erro #mensagem_erro{
