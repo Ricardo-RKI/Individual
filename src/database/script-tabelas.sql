@@ -25,9 +25,10 @@ qtd_fracassos INT
 CREATE TABLE rolagens (
 idrolagem INT PRIMARY KEY auto_increment,
 fkusuario INT,
-tipo_dado INT,
+tipo_dado VARCHAR(45),
 tipo_teste VARCHAR(45),
-resultado INT
-
+resultado INT,
+fracasso_ou_sucesso VARCHAR(45),
+data_rolagem TIMESTAMP DEFAULT CURRENT_TIMESTAMP()
 
 );

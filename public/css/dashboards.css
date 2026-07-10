@@ -5,7 +5,7 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Barlow', 'Segoe UI', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: IBM Plex Mono, 'Monospace';
 }
 
 .label-captura {
@@ -49,18 +49,7 @@ body {
   border-radius: 5px;
 }
 
-.dash-right .avisos .div-form button {
-  cursor: pointer;
-  font-family: 'Barlow', 'Segoe UI', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  border: 0;
-  border-radius: 5px;
-  font-weight: 600;
-  font-size: 18px;
-  padding: 10px 15px;
-  color: white;
-  background-color: #e6005a;
-  width: 120px;
-}
+
 
 .publicacao-btn-editar {
   cursor: pointer;
@@ -100,14 +89,7 @@ body {
   margin-bottom: 80px;
 }
 
-.div-buttons {
-  display: flex;
-  justify-content: flex-end;
-}
 
-.div-buttons>* {
-  margin-left: 30px;
-}
 
 /* pagina graficos */
 
@@ -424,4 +406,107 @@ canvas {
   padding: 10px 15px;
   margin-bottom: 100px;
   cursor: pointer;
+}
+
+.rolagens_dados {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+}
+.quadro_dados {
+  border: solid 2px #6D28D9;
+  background-color: #1E1B2E;
+  border-radius: 8px;
+  height: 300px;
+  width: 80%;
+  padding: 20px;
+}
+
+.selects {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  height: 100px;
+  margin-top: 10px;
+  width: 90%;
+}
+
+#tipo_dados {
+  color:  white;
+  font-size: 16px;
+  border: #6D28D9 solid 2px;
+  border-radius: 8px ;
+  background-color: #1E1B2E;
+  width: 160px;
+  height: 70px;
+  
+}
+
+#tipo_teste {
+  color:  white;
+  font-size: 16px;
+  border: #6D28D9 solid 2px;
+  border-radius: 8px ;
+  background-color: #1E1B2E;
+  width: 150px;
+  height: 70px;
+  
+}
+#valor_mod, #valor_dt, #qtd_dado {
+   color:  white;
+  font-size: 16px;
+  border: #6D28D9 solid 2px;
+  border-radius: 8px ;
+  background-color: #1E1B2E;
+  width: 140px;
+  height: 45px;
+  
+}
+.tipos {
+  display: flex;
+  flex-direction: column;
+}
+
+.tipos p {
+  color: white;
+  font-size:  16px;
+  font-weight: bold;
+}
+
+.container p{
+  color: white;
+  font-size: 28px;
+  font-weight: bold;
+}
+.botao_rolagem {
+  color: white;
+  font-weight: 600;
+  font-size: 16px;
+  width: 175px;
+  height: 50px; 
+  font-family: IBM Plex Mono, monospace;
+  background-color: #1E1B2E;
+  border: #6D28D9 solid 2px;
+  border-radius: 8px;
+}
+
+.mensagem_resultado {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: white;
+
+}
+
+.errado {
+  color: red;
+}
+.sucesso {
+  color: green;
+  font-weight: bold;
+}
+.fracasso {
+  color: red;
+  font-weight: bold;
 }

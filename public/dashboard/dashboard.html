@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Temporalis | Rolagens </title>
+    <title>Temporalis | Históricos </title>
 
     
     <link rel="stylesheet" href="./../css/dashboards.css">
@@ -32,22 +32,24 @@
 <body>
 
     <div class="header">
-      <div class="container">
-        <h1 class="titulo"><img src="../assets/img/Temporalis_Logo.png" alt=""></h1>
-        <ul class="navbar">
-          <li class="agora">
-            <a href="../index.html"> Homepage</a>
-          </li>
-          <li>
-            <a href= "dashboard.html">Rolagens</a>
-          </li>
-          <li>
-            <a href="historico.html"> Histórico </a>
-          </li>
-        </ul>
-      </div>
+        <div class="container">
+            <h1 class="titulo"><img src="../assets/img/Temporalis_Logo.png" alt=""></h1>
+
+            <p> Olá, <span id="usuario"> Usuário! </span> </p>
+
+            <ul class="navbar">
+                <li>
+                    <a href="rolagens.html">Rolagens</a>
+                </li>
+                <li class = "agora">
+                    <a href="./dashboard/historico.html"> Histórico </a>
+                </li>
+                <li>
+                    <a href="index.html"> Sair </a>
+                </li>
+            </ul>
+        </div>
     </div>
-  
 
 
 </body>
@@ -55,7 +57,7 @@
 </html>
 
 <script>
-    b_usuario.innerHTML = sessionStorage.NOME_USUARIO;
+    usuario.innerHTML = sessionStorage.NOME_USUARIO;
 
     let proximaAtualizacao;
 

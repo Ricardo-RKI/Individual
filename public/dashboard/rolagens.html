@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+    <link rel="icon" href="../assets/img/flavicontemporalis.png">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Rolagens </title>
+
+
+    <link rel="stylesheet" href="./../css/dashboards.css">
+    <link rel="stylesheet" href="./../css/estilo.css" />
+    <script src="../js/sessao.js"></script>
+    <script src="./../js/alerta.js"></script>
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+
+
+
+
+</head>
+
+<!-- <body onload=" atualizarFeed()"> -->
+
+<body>
+
+    <div class="header">
+        <div class="container">
+            <h1 class="titulo"><img src="../assets/img/Temporalis_Logo.png" alt=""></h1>
+
+            <p> Olá, <span id="usuario"> Usuário! </span> </p>
+
+            <ul class="navbar">
+                <li class="agora">
+                    <a href="dashboard.html">Rolagens</a>
+                </li>
+                <li>
+                    <a href="dashboard.html"> Histórico </a>
+                </li>
+                <li>
+                    <a href="/public/index.html"> Sair </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class=rolagens_dados>
+
+        <div class=selects>
+
+            <div class="tipos">
+                <p> Selecione o Tipo do Dado (TD): </p>
+                <select id="tipo_dados">
+                    <option value="D100">D100 </option>
+                    <option value="D20"> D20 </option>
+                    <option value="D12"> D12 </option>
+                    <option value="D10"> D10 </option>
+                    <option value="D8"> D8 </option>
+                    <option value="D4"> D4 </option>
+                </select>
+            </div>
+
+            <div class="tipos">
+                <p> Natureza do Teste (NT): </p>
+                <select id="tipo_teste">
+                    <option value="padrao">Padrão </option>
+                    <option value="vantagem"> Vantagem </option>
+                    <option value="desvantagem"> Desvantagem </option>
+                    <option value="soma"> Soma </option>
+                    <option value="tempo"> Temporalização </option>
+                </select>
+            </div>
+
+            <div class="tipos">
+                <p> Modificador (MOD): </p>
+                <input type="number" id="valor_mod" placeholder="+5, -5, +10...">
+            </div>
+
+            <div class="tipos">
+                <p> Dificuldade do Teste(DT): </p>
+                <input type="number" id="valor_dt" placeholder="20, 35...">
+            </div>
+
+            <div class="tipos">
+                <p> Quantidade de Dados (QD): </p>
+                <input type="number" id="qtd_dado" placeholder="2, 3...">
+            </div>
+
+
+
+
+        </div>
+
+        <button onclick="rolagem()" class="botao_rolagem"> Realizar Rolagem </button>
+
+        <div class="quadro_dados">
+            <div class="mensagem_resultado" id="mostrar_resultado"> A </div>
+        </div>
+
+    </div>
+
+
+
+</body>
+<script>
+    var nome_usuario = sessionStorage.NOME_USUARIO;
+    var id_usuario = sessionStorage.ID_USUARIO;
+
+    usuario.innerHTML = nome_usuario;
+    let resultados_dados = [];
+
+    function rolagem() {
+        mostrar_resultado.innerHTML = "";
+
+        let resultado_rolagem;
+        let resultado_final = 0;
+        let fracasso_sucesso = "";
+
+
+        let dado = tipo_dados.value;
+        let mod = valor_mod.value;
+        let dt = valor_dt.value;
+        let teste = tipo_teste.value;
+        let qtd_dados = qtd_dado.value;
+
+        if (mod == "" || dt == "" || qtd_dados == "") {
+            mostrar_resultado.innerHTML = `<span class = "errado"> Certifique-se de que os campos Modificador, Dificuldade do Teste e Quantidade de Dados estão preenchidos! </span>`
+            return;
+        }
+
+        if (dado == "D100") {
+            resultado_rolagem = rolar_dado(100);
+        } else if (dado == "D20") {
+            resultado_rolagem = rolar_dado(20);
+        } else if (dado == "D12") {
+            resultado_rolagem = rolar_dado(12);
+        } else if (dado == "D10") {
+            resultado_rolagem = rolar_dado(10);
+        } else if (dado == "D8") {
+            resultado_rolagem = rolar_dado(8);
+        } else if (dado == "D4") {
+            resultado_rolagem = rolar_dado(4);
+        }
+
+        if (teste == "vantagem") {
+            let maior = 0;
+            for (let i = 0; i < resultados_dados.length; i++) {
+                maior = resultados_dados[0];
+
+                if (resultados_dados[i] > maior) {
+                    maior = resultados_dados[i];
+                }
+
+            }
+
+            resultado_final = maior + Number(mod);
+            console.log(maior);
+            console.log("Resultado Final: " + resultado_final);
+            if (resultado_final > Number(dt)) {
+            fracasso_sucesso = "Sucesso";
+            mostrar_resultado.innerHTML = `  Resultados Dados = ${resultados_dados}. MOD = ${mod}. Resultado Final: ${maior} + ${mod} = ${resultado_final}. DT = ${dt} <span class = "sucesso"> Você Passou no Teste </span>`;
+            } else {
+            fracasso_sucesso = "Fracasso";    
+            mostrar_resultado.innerHTML = ` Resultados Dados = ${resultados_dados}. MOD = ${mod}. Resultado Final: ${maior} + ${mod} = ${resultado_final}. DT = ${dt} <span class = "fracasso">  Você Fracassou no Teste </span>`;
+            }
+
+        } else if (teste == "desvantagem") {
+            let menor = 0;
+
+            for (let i = 0; i < resultados_dados.length; i++) {
+                menor = resultados_dados[0];
+
+                if (resultados_dados[i] < menor) {
+                    menor = resultados_dados[i];
+                }
+
+            }
+
+
+            resultado_final = menor + Number(mod);
+            console.log(menor);
+            console.log("Resultado Final:" + resultado_final);
+            if (resultado_final > Number(dt)) {
+            fracasso_sucesso = "Sucesso";
+            mostrar_resultado.innerHTML = `  Resultados Dados = ${resultados_dados}. MOD = ${mod}. Resultado Final: ${menor} + ${mod} = ${resultado_final}. DT = ${dt} <span class = "sucesso"> Você Passou no Teste </span>`;
+            } else {
+            fracasso_sucesso = "Fracasso";    
+            mostrar_resultado.innerHTML = ` Resultados Dados = ${resultados_dados}. MOD = ${mod}. Resultado Final: ${menor} + ${mod} = ${resultado_final}. DT = ${dt} <span class = "fracasso">  Você Fracassou no Teste </span>`;
+            }
+
+        } else if (teste == "soma") {
+            let soma = 0;
+
+            for (let s = 0; s < resultados_dados.length; s++) {
+                soma += resultados_dados[s];
+            }
+            resultado_final = soma + Number(mod);
+            console.log(soma);
+            console.log("Resultado Final: " + resultado_final);
+            if (resultado_final > Number(dt)) {
+            fracasso_sucesso = "Sucesso";
+            mostrar_resultado.innerHTML = `  Resultados Dados = ${resultados_dados}. MOD = ${mod}. Resultado Final: ${soma} + ${mod} = ${resultado_final}. DT = ${dt} <span class = "sucesso"> Você Passou no Teste </span>`;
+            } else {
+            fracasso_sucesso = "Fracasso";    
+            mostrar_resultado.innerHTML = ` Resultados Dados = ${resultados_dados}. MOD = ${mod}. Resultado Final: ${soma} + ${mod} = ${resultado_final}. DT = ${dt} <span class = "fracasso">  Você Fracassou no Teste </span>`;
+            }
+        } else if (teste == "tempo" || teste == "padrao") {
+            resultado_final = resultado_rolagem + Number(mod);
+            if (resultado_final > Number(dt)) {
+            fracasso_sucesso = "Sucesso";
+            console.log(fracasso_sucesso)
+            mostrar_resultado.innerHTML = `  Resultados Dados = ${resultado_rolagem}. MOD = ${mod}. Resultado Final: ${resultado_rolagem} + ${mod} = ${resultado_final}. DT = ${dt} <span class = "sucesso"> Você Passou no Teste </span>`;
+            } else {
+            fracasso_sucesso = "Fracasso";
+            mostrar_resultado.innerHTML = ` Resultados Dados = ${resultado_rolagem}. MOD = ${mod}. Resultado Final: ${resultado_rolagem} + ${mod} = ${resultado_final}. DT = ${dt} <span class = "fracasso">  Você Fracassou no Teste </span>`;
+            }
+        }
+
+        fetch("/dados/cadastrar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                idUsuarioServer : id_usuario,
+                tipoDadoServer : dado,
+                tipoTesteServer: teste,
+                resultadoServer: resultado_final,
+                sucessoFracassoServer : fracasso_sucesso,
+
+            }),
+        })
+
+        .then(function(resposta) {
+            console.log("resposta: ", resposta);
+            if (resposta.ok) {
+                console.log("Tudo Okay")
+            } else {
+                throw "Houve um erro ao tentar cadastrar a rolagem"
+            }
+        })
+        .catch(function(resposta) {
+            console.log(`#ERRO: ${resposta}`)
+        });
+
+        return false
+
+    }
+
+    function rolar_dado(numero) {
+        let teste = tipo_teste.value;
+        let qtd_dados = qtd_dado.value;
+        let mod_tempo_porcentagem;
+        let resultado_porcentagem_da_rolagem;
+
+        resultados_dados = [];
+
+        let dado_rolado;
+
+        if (teste == "padrao") {
+            dado_rolado = Math.floor(Math.random() * numero)
+            console.log(dado_rolado)
+
+            return dado_rolado
+        } if (teste == "vantagem" || teste == "desvantagem" || teste == "soma") {
+            if (qtd_dados > 1) {
+                for (let i = 0; i < qtd_dados; i++) {
+                    dado_rolado = resultados_dados.push(Math.floor(Math.random() * numero))
+                    console.log(resultados_dados);
+                }
+
+                return resultados_dados;
+
+            } else {
+                mostrar_resultado.innerHTML = `<span class = "errado"> Quantidade de Dados para um teste de natureza desse tipo! </span>`
+            }
+        } if (teste == "tempo") {
+            if (qtd_dados > 1) {
+                resultado_porcentagem_da_rolagem = [];
+                mod_tempo_porcentagem = Math.floor(Math.random() * 100);
+                console.log("Porcentagem:" + mod_tempo_porcentagem)
+
+                for (let i = 0; i < qtd_dados; i++) {
+                    dado_rolado = resultados_dados.push(Math.floor(Math.random() * numero));
+                    console.log(resultados_dados);
+                }
+
+                let contador = 0;
+
+                while (contador < resultados_dados.length) {
+                    contador++
+
+                    resultado_porcentagem_da_rolagem = Math.floor(resultados_dados[0] * (mod_tempo_porcentagem / 100));
+                    console.log(resultado_porcentagem_da_rolagem);
+                    resultados_dados.push(resultado_porcentagem_da_rolagem);
+                    resultados_dados.splice(0, 1);
+
+                    
+                }
+
+                console.log("Lista Final" + resultados_dados);
+
+                return resultado_porcentagem_da_rolagem;
+            } else {
+                dado_rolado = Math.floor(Math.random() * numero)
+               
+                mod_tempo_porcentagem = Math.floor(Math.random() * 100);
+
+                resultado_porcentagem_da_rolagem = Math.floor(dado_rolado * (mod_tempo_porcentagem / 100));
+
+                return resultado_porcentagem_da_rolagem
+            }
+        }
+
+
+    }
+</script>
+
+</html>
