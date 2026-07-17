@@ -2,14 +2,14 @@
 <html lang="pt-br">
 
 <head>
-    
+
     <link rel="icon" href="../assets/img/flavicontemporalis.png">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Temporalis | Históricos </title>
 
-    
+
     <link rel="stylesheet" href="./../css/dashboards.css">
     <link rel="stylesheet" href="./../css/estilo.css" />
     <script src="../js/sessao.js"></script>
@@ -23,11 +23,9 @@
     <!-- scripts do Chart.js - 2022-1 -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <!--FONT AWESOME-->
-    <script src="https://kit.fontawesome.com/9f7414eb10.js" crossorigin="anonymous"></script>
-</head>
 
-<!-- <body onload=" atualizarFeed()"> -->
+
+    <!-- <body onload=" atualizarFeed()"> -->
 
 <body>
 
@@ -41,15 +39,61 @@
                 <li>
                     <a href="rolagens.html">Rolagens</a>
                 </li>
-                <li class = "agora">
-                    <a href="./dashboard/historico.html"> Histórico </a>
+                <li class="agora">
+                    <a href="historico.html"> Histórico </a>
                 </li>
                 <li>
-                    <a href="index.html"> Sair </a>
+                    <a class="link_sair" href="/public/index.html"> Sair </a>
                 </li>
             </ul>
         </div>
     </div>
+
+    <div class="kpi_e_graficos">
+
+        <div class="kpis">
+
+            <div class="kpi">
+
+                <p> Total de Rolagens </p>
+                <span id="rolagens_totais"> 0 </span>
+
+            </div>
+
+            <div class="kpi">
+                <p> Total de Sucessos </p>
+                <span id="sucessos_totais"> 0 </span>
+            </div>
+
+            <div class="kpi">
+                <p> Total de Fracasssos </p>
+                <span id="fracassos_totais"> 0 </span>
+            </div>
+
+            <div class="kpi">
+                <p> Média de Sucessos por Rolagem </p>
+                <span id="media"> 0 </span>
+            </div>
+
+        </div>
+
+        <div class="graficos_rosquinha">
+            <div class="rosquinha_total">
+                <canvas id="grafico_total"> </canvas>
+            </div>
+            <div class="rosquinha_percentual">
+                <canvas id="grafico_percentual"> </canvas>
+            </div>
+        </div>
+    
+    <div class = "linha_do_tempo"> 
+        <canvas id = "grafico_linha_do_tempo"> 
+        </canvas>
+    </div>
+
+    </div>
+
+
 
 
 </body>
@@ -57,229 +101,211 @@
 </html>
 
 <script>
-    usuario.innerHTML = sessionStorage.NOME_USUARIO;
 
+    window.onload = procurarDados()
+
+    usuario.innerHTML = sessionStorage.NOME_USUARIO;
+    let rolagem_total = 0;
     let proximaAtualizacao;
 
-    window.onload = exibirAquariosDoUsuario();
 
-    function exibirAquariosDoUsuario() {
-        var aquarios = JSON.parse(sessionStorage.AQUARIOS);
-        aquarios.forEach(item => {
-            document.getElementById("btnAquario").innerHTML += `
-            <button class="btn-chart" onclick="exibirAquario(${item.id})" id="btnAquario${item.id}">${item.descricao}</button>
-            `
+    function procurarDados() {
+        var id_usuario = sessionStorage.ID_USUARIO;
+        fetch(`/dashboard/listar/${id_usuario}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        }).then(function (resposta) {
+            console.log("resposta:", resposta);
+            if (resposta.ok) {
+                console.log("tudo_okay")
 
-            document.getElementById("graficos").innerHTML += `
-                <div id="grafico${item.id}" class="display-none">
-                    <h3 class="tituloGraficos">
-                        <span id="tituloAquario${item.id}">${item.descricao}</span>
-                    </h3>
-                    <div class="graph">
-                        <canvas id="myChartCanvas${item.id}"></canvas>
-                    </div>
-                    <div class="label-captura">
-                        <p id="avisoCaptura${item.id}" style="color: white"></p>
-                    </div>
-                </div>
-            `
+                resposta.json().then(json => {
 
-            obterDadosGrafico(item.id)
-        });
+                    let dataTotalRosquinha = [];
+                    let dataPercentualRosquinha = [];
 
-        if (aquarios.length > 0) {
-            exibirAquario(aquarios[0].id)
-        }
-    }
+                    rolagens_totais.innerHTML = json.rolagens;
+                    sucessos_totais.innerHTML = json.sucessos;
+                    fracassos_totais.innerHTML = json.fracassos;
+                    media.innerHTML = Number(json.media) * 100 + "%";
 
-    function alterarTitulo(idAquario) {
-        var tituloAquario = document.getElementById(`tituloAquario${idAquario}`)
-        var descricao = JSON.parse(sessionStorage.AQUARIOS).find(item => item.id == idAquario).descricao;
-        tituloAquario.innerHTML = "Últimas medidas do <span style='color: #e6005a'>" + descricao + "</span>"
-    }
+                    dataTotalRosquinha.push(json.rolagens);
+                    dataTotalRosquinha.push(json.sucessos);
+                    dataTotalRosquinha.push(json.fracassos);
+                    dataPercentualRosquinha.push(Number(json.media) * 100)
 
-    function exibirAquario(idAquario) {
-        let todosOsGraficos = JSON.parse(sessionStorage.AQUARIOS);
+                    console.log("data Total:" + dataTotalRosquinha);
+                    console.log("data Percentual:" + dataPercentualRosquinha);
 
-        for (i = 0; i < todosOsGraficos.length; i++) {
-            // exibindo - ou não - o gráfico
-            if (todosOsGraficos[i].id != idAquario) {
-                let elementoAtual = document.getElementById(`grafico${todosOsGraficos[i].id}`)
-                if (elementoAtual.classList.contains("display-block")) {
-                    elementoAtual.classList.remove("display-block")
-                }
-                elementoAtual.classList.add("display-none")
+                    plotarGraficoRosquinha(dataTotalRosquinha, dataPercentualRosquinha);
+                    procurarDadosLinhaTempo();
+                })
 
-                // alterando estilo do botão
-                let btnAtual = document.getElementById(`btnAquario${todosOsGraficos[i].id}`)
-                if (btnAtual.classList.contains("btn-pink")) {
-                    btnAtual.classList.remove("btn-pink")
-                }
-                btnAtual.classList.add("btn-white")
-            }
-        }
 
-        // exibindo - ou não - o gráfico
-        let graficoExibir = document.getElementById(`grafico${idAquario}`)
-        graficoExibir.classList.remove("display-none")
-        graficoExibir.classList.add("display-block")
 
-        // alterando estilo do botão
-        let btnExibir = document.getElementById(`btnAquario${idAquario}`)
-        btnExibir.classList.remove("btn-white")
-        btnExibir.classList.add("btn-pink")
-    }
 
-    // O gráfico é construído com três funções:
-    // 1. obterDadosGrafico -> Traz dados do Banco de Dados para montar o gráfico da primeira vez
-    // 2. plotarGrafico -> Monta o gráfico com os dados trazidos e exibe em tela
-    // 3. atualizarGrafico -> Atualiza o gráfico, trazendo novamente dados do Banco
-
-    // Esta função *obterDadosGrafico* busca os últimos dados inseridos em tabela de medidas.
-    // para, quando carregar o gráfico da primeira vez, já trazer com vários dados.
-    // A função *obterDadosGrafico* também invoca a função *plotarGrafico*
-
-    //     Se quiser alterar a busca, ajuste as regras de negócio em src/controllers
-    //     Para ajustar o "select", ajuste o comando sql em src/models
-    function obterDadosGrafico(idAquario) {
-
-        alterarTitulo(idAquario)
-
-        if (proximaAtualizacao != undefined) {
-            clearTimeout(proximaAtualizacao);
-        }
-
-        fetch(`/medidas/ultimas/${idAquario}`, { cache: 'no-store' }).then(function (response) {
-            if (response.ok) {
-                response.json().then(function (resposta) {
-                    console.log(`Dados recebidos: ${JSON.stringify(resposta)}`);
-                    resposta.reverse();
-
-                    plotarGrafico(resposta, idAquario);
-
-                });
             } else {
-                console.error('Nenhum dado encontrado ou erro na API');
+                throw "Houve um erro ao tentar mandar os dados"
             }
         })
-            .catch(function (error) {
-                console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
-            });
+            .catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`)
+            })
+
+        return false
+
     }
+   function plotarGraficoRosquinha(dataRosquinhaTotal, dataRosquinhaPercentual) {
 
-    // Esta função *plotarGrafico* usa os dados capturados na função anterior para criar o gráfico
-    // Configura o gráfico (cores, tipo, etc), materializa-o na página e, 
-    // A função *plotarGrafico* também invoca a função *atualizarGrafico*
-    function plotarGrafico(resposta, idAquario) {
+        const grafico_rosquinha_total = document.getElementById('grafico_total');
+        const grafico_rosquinha_percentual = document.getElementById('grafico_percentual');
 
-        console.log('iniciando plotagem do gráfico...');
-
-        // Criando estrutura para plotar gráfico - labels
-        let labels = [];
-
-        // Criando estrutura para plotar gráfico - dados
-        let dados = {
-            labels: labels,
-            datasets: [
-            {
-                label: 'Temperatura',
-                data: [],
-                fill: false,
-                borderColor: 'rgb(199, 52, 52)',
-                tension: 0.1
-            }]
-        };
-
-        console.log('----------------------------------------------')
-        console.log('Estes dados foram recebidos pela funcao "obterDadosGrafico" e passados para "plotarGrafico":')
-        console.log(resposta)
-
-        // Inserindo valores recebidos em estrutura para plotar o gráfico
-        for (i = 0; i < resposta.length; i++) {
-            var registro = resposta[i];
-            labels.push(registro.momento_grafico);
-            dados.datasets[0].data.push(registro.temperatura);
-        }
-
-        console.log('----------------------------------------------')
-        console.log('O gráfico será plotado com os respectivos valores:')
-        console.log('Labels:')
-        console.log(labels)
-        console.log('Dados:')
-        console.log(dados.datasets)
-        console.log('----------------------------------------------')
-
-        // Criando estrutura para plotar gráfico - config
-        const config = {
-            type: 'line',
-            data: dados,
-        };
-
-        // Adicionando gráfico criado em div na tela
-        let myChart = new Chart(
-            document.getElementById(`myChartCanvas${idAquario}`),
-            config
-        );
-
-        setTimeout(() => atualizarGrafico(idAquario, dados, myChart), 2000);
-    }
-
-
-    // Esta função *atualizarGrafico* atualiza o gráfico que foi renderizado na página,
-    // buscando a última medida inserida em tabela contendo as capturas, 
-
-    //     Se quiser alterar a busca, ajuste as regras de negócio em src/controllers
-    //     Para ajustar o "select", ajuste o comando sql em src/models
-    function atualizarGrafico(idAquario, dados, myChart) {
-
-
-
-        fetch(`/medidas/tempo-real/${idAquario}`, { cache: 'no-store' }).then(function (response) {
-            if (response.ok) {
-                response.json().then(function (novoRegistro) {
-
-                    obterdados(idAquario);
-                    // alertar(novoRegistro, idAquario);
-                    console.log(`Dados recebidos: ${JSON.stringify(novoRegistro)}`);
-                    console.log(`Dados atuais do gráfico:`);
-                    console.log(dados);
-
-                    let avisoCaptura = document.getElementById(`avisoCaptura${idAquario}`)
-                    avisoCaptura.innerHTML = ""
-
-
-                    if (novoRegistro[0].momento_grafico == dados.labels[dados.labels.length - 1]) {
-                        console.log("---------------------------------------------------------------")
-                        console.log("Como não há dados novos para captura, o gráfico não atualizará.")
-                        avisoCaptura.innerHTML = "<i class='fa-solid fa-triangle-exclamation'></i> Foi trazido o dado mais atual capturado pelo sensor. <br> Como não há dados novos a exibir, o gráfico não atualizará."
-                        console.log("Horário do novo dado capturado:")
-                        console.log(novoRegistro[0].momento_grafico)
-                        console.log("Horário do último dado capturado:")
-                        console.log(dados.labels[dados.labels.length - 1])
-                        console.log("---------------------------------------------------------------")
-                    } else {
-                        // tirando e colocando valores no gráfico
-                        dados.labels.shift(); // apagar o primeiro
-                        dados.labels.push(novoRegistro[0].momento_grafico); // incluir um novo momento
-
-                        dados.datasets[0].data.shift();  // apagar o primeiro de temperatura
-                        dados.datasets[0].data.push(novoRegistro[0].temperatura); // incluir uma nova medida de temperatura
-
-                        myChart.update();
+        new Chart(grafico_rosquinha_total, {
+            type: 'doughnut',
+            data: {
+                labels: ['Total Rolagens', 'Total Sucessos', 'Total Fracassos'],
+                datasets: [{
+                    label: 'Quantidade Total',
+                    data: dataRosquinhaTotal,
+                    backgroundColor: ['aquamarine', 'green', 'red'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Total de Rolagens, Sucessos e Fracassos',
+                        color: 'white',
+                        font: {
+                            size: 20,
+                            weight: 'bold',
+                        }
                     }
-
-                    // Altere aqui o valor em ms se quiser que o gráfico atualize mais rápido ou mais devagar
-                    proximaAtualizacao = setTimeout(() => atualizarGrafico(idAquario, dados, myChart), 2000);
-                });
-            } else {
-                console.error('Nenhum dado encontrado ou erro na API');
-                // Altere aqui o valor em ms se quiser que o gráfico atualize mais rápido ou mais devagar
-                proximaAtualizacao = setTimeout(() => atualizarGrafico(idAquario, dados, myChart), 2000);
+                }
             }
         })
-            .catch(function (error) {
-                console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
-            });
 
+        new Chart(grafico_rosquinha_percentual, {
+            type: 'doughnut',
+            data: {
+                labels: ['Média de Sucessos', 'Média de Fracassos'],
+                datasets: [{
+                    label: 'Média Resultante',
+                    data: [dataRosquinhaPercentual, 100 - Number(dataRosquinhaPercentual) ],
+                    backgroundColor: ['green', 'red'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Percentual de Sucessos e Fracassos (%)',
+                        color: 'white',
+                        font: {
+                            size: 20,
+                            weight: 'bold',
+                        }
+                    }
+                }
+            }
+        })
     }
+
+    function procurarDadosLinhaTempo() {
+
+        var id_usuario = sessionStorage.ID_USUARIO;
+        fetch(`/dashboard/linhaTempo/${id_usuario}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        }).then(function (resposta) {
+            console.log("resposta:", resposta);
+            if (resposta.ok) {
+
+                console.log("tudo_okay")
+
+                resposta.json().then(json => {
+
+                    let data_rolagem = [];
+                    let total_dados = [];
+                    console.log("Json da Linha do Tempo"  + json)
+                    for(let i = 0; i < json.length; i++) {
+                    data_rolagem.push(json[i].data_dia);
+                    total_dados.push(json[i].total_rolagens);
+                    }
+                    
+                    
+
+                    console.log("Data Rolagens:" + data_rolagem);
+                    console.log("Total Rolagens:" + total_dados);
+
+                    plotarGraficoLinhaTempo(data_rolagem, total_dados);
+              
+                })
+
+
+
+
+            } else {
+                throw "Houve um erro ao tentar mandar os dados"
+            }
+        })
+            .catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`)
+            })
+
+        return false
+    }
+function plotarGraficoLinhaTempo(data_rolagem, total_dados) {
+    const grafico_historico = document.getElementById('grafico_linha_do_tempo')
+
+    new Chart(grafico_historico, {
+        type: 'line',
+        data: {
+            labels: data_rolagem, 
+            datasets: [{
+                label: ['Quantidade de Rolagens'],
+                data: total_dados,
+                backgroundColor: 'aquamarine',
+                borderColor: 'aquamarine',
+                borderWidth: 1,
+            }]
+        }, 
+        options: {
+            plugins: {
+            title: {
+                display: true,
+                text: 'Linha do Tempo da sua Atividade',
+                color: 'white', 
+                font: {
+                    size: 20,
+                    weight: 'bold',
+                }
+            }
+        },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    color: 'white',
+                    font: {
+                        size: 16,
+                        weight: 'bold'
+                    }
+                },
+                x: {
+                    color: 'white',
+                    font: {
+                        size: 16,
+                        weight: 'bold'
+                    }
+                }
+            }
+        }
+    })
+}
 </script>

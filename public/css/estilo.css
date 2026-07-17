@@ -4,7 +4,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: IBM Plex Mono, 'Monospace';
-  background-color: black;
+  background-color: #050614;
 }
 
 :root {
@@ -229,7 +229,7 @@ padding: 20px;
   color: #fff;
   display: flex;
   font-size: 15px;
-  margin-top: 100px;
+  margin-top: 120px;
   border-top: solid #6D28D9 2px;
 }
 
