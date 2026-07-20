@@ -33,7 +33,7 @@
         <div class="container">
             <h1 class="titulo"><img src="../assets/img/Temporalis_Logo.png" alt=""></h1>
 
-            <p> Olá, <span id="usuario"> Usuário! </span> </p>
+            <p> Olá, <span id="usuario"> Usuário! </span>! </p>
 
             <ul class="navbar">
                 <li class="agora">
@@ -100,6 +100,7 @@
 
         <div class="quadro_dados">
             <div class="mensagem_resultado" id="mostrar_resultado">  </div>
+            <div class="mensagem_resultado" id="mostrar_resultado_dois">  </div>
         </div>
 
     </div>
@@ -163,10 +164,14 @@
             console.log("Resultado Final: " + resultado_final);
             if (resultado_final > Number(dt)) {
             fracasso_sucesso = "Sucesso";
-            mostrar_resultado.innerHTML = `  Resultados Dados = ${resultados_dados}. MOD = ${mod}. Resultado Final: ${maior} + ${mod} = ${resultado_final}. DT = ${dt} <span class = "sucesso"> Você Passou no Teste </span>`;
+            mostrar_resultado.innerHTML = ` <h2 class = "titulo_teste"> Características do Teste: </h2> <span> Resultado Final:  ${maior} + ${mod} = ${resultado_final}. </span> <span> Resultados Dados = ${resultados_dados}.  </span> <span> Natureza do Teste: ${teste}. </span> <span> MOD = ${mod}. </span> <span>  DT = ${dt} </span>  `;
+
+            mostrar_resultado_dois.innerHTML = `<span class = "sucesso"> Sucesso! </span> <span class = "sucesso"> Você Passou no Teste! </span>`;
             } else {
             fracasso_sucesso = "Fracasso";    
-            mostrar_resultado.innerHTML = ` Resultados Dados = ${resultados_dados}. MOD = ${mod}. Resultado Final: ${maior} + ${mod} = ${resultado_final}. DT = ${dt} <span class = "fracasso">  Você Fracassou no Teste </span>`;
+            mostrar_resultado.innerHTML = ` <h2 class = "titulo_teste"> Características do Teste: </h2> <span> Resultado Final:  ${maior} + ${mod} = ${resultado_final}. </span> <span> Resultados Dados = ${resultados_dados}.  </span> <span> Natureza do Teste: ${teste}. </span> <span> MOD = ${mod}. </span> <span>  DT = ${dt} </span>  `;
+            
+            mostrar_resultado_dois.innerHTML = `<span class = "fracasso"> Fracasso! </span> <span class = "fracasso"> Você Fracassou no Teste! </span>`;
             }
 
         } else if (teste == "desvantagem") {
@@ -187,10 +192,14 @@
             console.log("Resultado Final:" + resultado_final);
             if (resultado_final > Number(dt)) {
             fracasso_sucesso = "Sucesso";
-            mostrar_resultado.innerHTML = `  Resultados Dados = ${resultados_dados}. MOD = ${mod}. Resultado Final: ${menor} + ${mod} = ${resultado_final}. DT = ${dt} <span class = "sucesso"> Você Passou no Teste </span>`;
+            mostrar_resultado.innerHTML = ` <h2 class = "titulo_teste"> Características do Teste: </h2> <span> Resultado Final:  ${maior} + ${mod} = ${resultado_final}. </span> <span> Resultados Dados = ${resultados_dados}.  </span> <span> Natureza do Teste: ${teste}. </span> <span> MOD = ${mod}. </span> <span>  DT = ${dt} </span>  `;
+
+            mostrar_resultado_dois.innerHTML = `<span class = "sucesso"> Sucesso! </span> <span class = "sucesso"> Você Passou no Teste! </span>`;
             } else {
             fracasso_sucesso = "Fracasso";    
-            mostrar_resultado.innerHTML = ` Resultados Dados = ${resultados_dados}. MOD = ${mod}. Resultado Final: ${menor} + ${mod} = ${resultado_final}. DT = ${dt} <span class = "fracasso">  Você Fracassou no Teste </span>`;
+            mostrar_resultado.innerHTML = ` <h2 class = "titulo_teste"> Características do Teste: </h2> <span> Resultado Final:  ${maior} + ${mod} = ${resultado_final}. </span> <span> Resultados Dados = ${resultados_dados}.  </span> <span> Natureza do Teste: ${teste}. </span> <span> MOD = ${mod}. </span> <span>  DT = ${dt} </span>  `;
+            
+            mostrar_resultado_dois.innerHTML = `<span class = "fracasso"> Fracasso! </span> <span class = "fracasso"> Você Fracassou no Teste! </span>`;
             }
 
         } else if (teste == "soma") {
@@ -204,20 +213,31 @@
             console.log("Resultado Final: " + resultado_final);
             if (resultado_final > Number(dt)) {
             fracasso_sucesso = "Sucesso";
-            mostrar_resultado.innerHTML = `  Resultados Dados = ${resultados_dados}. MOD = ${mod}. Resultado Final: ${soma} + ${mod} = ${resultado_final}. DT = ${dt} <span class = "sucesso"> Você Passou no Teste </span>`;
+            mostrar_resultado.innerHTML = ` <h2 class = "titulo_teste"> Características do Teste: </h2> <span> Resultado Final:  ${maior} + ${mod} = ${resultado_final}. </span> <span> Resultados Dados = ${resultados_dados}.  </span> <span> Natureza do Teste: ${teste}. </span> <span> MOD = ${mod}. </span> <span>  DT = ${dt} </span>  `;
+
+            mostrar_resultado_dois.innerHTML = `<span class = "sucesso"> Sucesso! </span> <span class = "sucesso"> Você Passou no Teste! </span>`;
+
+
             } else {
             fracasso_sucesso = "Fracasso";    
-            mostrar_resultado.innerHTML = ` Resultados Dados = ${resultados_dados}. MOD = ${mod}. Resultado Final: ${soma} + ${mod} = ${resultado_final}. DT = ${dt} <span class = "fracasso">  Você Fracassou no Teste </span>`;
+            mostrar_resultado.innerHTML = ` <h2 class = "titulo_teste"> Características do Teste: </h2> <span> Resultado Final:  ${maior} + ${mod} = ${resultado_final}. </span> <span> Resultados Dados = ${resultados_dados}.  </span> <span> Natureza do Teste: ${teste}. </span> <span> MOD = ${mod}. </span> <span>  DT = ${dt} </span>  `;
+            
+            mostrar_resultado_dois.innerHTML = `<span class = "fracasso"> Fracasso! </span> <span class = "fracasso"> Você Fracassou no Teste! </span>`;
             }
         } else if (teste == "tempo" || teste == "padrao") {
             resultado_final = resultado_rolagem + Number(mod);
             if (resultado_final > Number(dt)) {
             fracasso_sucesso = "Sucesso";
             console.log(fracasso_sucesso)
-            mostrar_resultado.innerHTML = `  Resultados Dados = ${resultado_rolagem}. MOD = ${mod}. Resultado Final: ${resultado_rolagem} + ${mod} = ${resultado_final}. DT = ${dt} <span class = "sucesso"> Você Passou no Teste </span>`;
+            mostrar_resultado.innerHTML = ` <h2 class = "titulo_teste"> Características do Teste: </h2> <span> Resultado Final:  ${resultado_rolagem} + ${mod} = ${resultado_final}. </span> <span> Resultados Dados = ${resultados_dados}.  </span> <span> Natureza do Teste: ${teste}. </span> <span> MOD = ${mod}. </span> <span>  DT = ${dt} </span>  `;
+
+            mostrar_resultado_dois.innerHTML = `<span class = "sucesso"> Sucesso! </span> <span class = "sucesso"> Você Passou no Teste! </span>`;
+
             } else {
             fracasso_sucesso = "Fracasso";
-            mostrar_resultado.innerHTML = ` Resultados Dados = ${resultado_rolagem}. MOD = ${mod}. Resultado Final: ${resultado_rolagem} + ${mod} = ${resultado_final}. DT = ${dt} <span class = "fracasso">  Você Fracassou no Teste </span>`;
+            mostrar_resultado.innerHTML = ` <h2 class = "titulo_teste"> Características do Teste: </h2> <span> Resultado Final:  ${resultado_rolagem} + ${mod} = ${resultado_final}. </span> <span> Resultados Dados = ${resultados_dados}.  </span> <span> Natureza do Teste: ${teste}. </span> <span> MOD = ${mod}. </span> <span>  DT = ${dt} </span>  `;
+            
+            mostrar_resultado_dois.innerHTML = `<span class = "fracasso"> Fracasso! </span> <span class = "fracasso"> Você Fracassou no Teste! </span>`;
             }
         }
 

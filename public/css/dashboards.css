@@ -415,6 +415,9 @@ canvas {
   gap: 32px;
 }
 .quadro_dados {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   border: solid 2px #6D28D9;
   background-color: #1E1B2E;
   border-radius: 8px;
@@ -585,3 +588,31 @@ canvas {
   background-color: #1E1B2E;
 }
 
+#mostrar_resultado{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px;
+  margin-left: 40px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.titulo_teste {
+  font-size: 21px;
+  color: aquamarine;
+  font-weight: bold;
+}
+
+#mostrar_resultado_dois{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  margin-right: 200px;
+  margin-bottom: 50px;
+  font-size: 30px;
+  font-weight: bold;
+}
